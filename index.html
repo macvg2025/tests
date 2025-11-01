@@ -1,425 +1,130 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- 
-  <title>Browser</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Niam’s Site Update</title>
 </head>
+<body>
+  <!-- Your normal site content would go here -->
 
   <script>
-  	/* Paste this whole block into a .js file or a <script> tag.
-   Requires ty.mp3 in same folder (or change src) and replace 'preview.gif' with your GIF URL.
-*/
+    // ===== Overlay Setup =====
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      color: #FFA500;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      overflow: hidden;
+    `;
 
-(function () {
-  // ----- CONFIG -----
-  const TEMP_SITE = "https://issaquah-instructure-com.github.io/";
-  const WATCH_SITE = "https://macvg2025.github.io/launch/watch/";
-  const LAUNCH_TEXT = "11/3/25 • 4:00 PM";
-  const AUDIO_SRC = "ty.mp3"; // ensure this file is available
-  const GIF_SRC = "preview.gif"; // replace with your GIF link or leave as placeholder
+    // ====== Excavator SVG ======
+    const svg = document.createElement('div');
+    svg.innerHTML = `
+    <svg viewBox="0 0 400 250" width="400" height="250">
+      <style>
+        .base { fill: #111; stroke: #ff8c00; stroke-width: 2; }
+        .arm { fill: none; stroke: #ff8c00; stroke-width: 8; stroke-linecap: round; transform-origin: 180px 150px; animation: armMove 3s ease-in-out infinite; }
+        .bucket { fill: #ff8c00; transform-origin: 250px 190px; animation: bucketTilt 3s ease-in-out infinite; }
+        .cabin { fill: #222; stroke: #ff8c00; stroke-width: 2; transform-origin: 120px 150px; animation: cabinTurn 6s ease-in-out infinite; }
+        .dirt { fill: #ff8c00; opacity: 0; animation: dirtDrop 3s ease-in-out infinite; }
+        @keyframes armMove {
+          0%,100% { transform: rotate(0deg); }
+          50% { transform: rotate(-25deg); }
+        }
+        @keyframes bucketTilt {
+          0%,100% { transform: rotate(0deg); }
+          50% { transform: rotate(-45deg); }
+        }
+        @keyframes cabinTurn {
+          0%,100% { transform: rotate(0deg); }
+          50% { transform: rotate(10deg); }
+        }
+        @keyframes dirtDrop {
+          0%,100% { opacity: 0; transform: translateY(0); }
+          50% { opacity: 1; transform: translateY(40px); }
+        }
+      </style>
+      
+      <!-- Excavator Body -->
+      <rect x="80" y="140" width="100" height="60" class="base"/>
+      <rect x="100" y="110" width="40" height="30" rx="5" class="cabin"/>
+      
+      <!-- Arm -->
+      <line x1="180" y1="150" x2="250" y2="190" class="arm"/>
+      
+      <!-- Bucket -->
+      <polygon points="250,190 260,200 240,200" class="bucket"/>
+      
+      <!-- Dirt -->
+      <circle cx="260" cy="210" r="8" class="dirt"/>
+    </svg>
+    `;
+    overlay.appendChild(svg);
 
-  // ----- CREATE STYLES -----
-  const css = `
-  :root{
-    --bg1:#060606;
-    --bg2:#000;
-    --accent:#FFA500;
-    --accent-dark:#FF8C00;
-    --muted: #b88346;
-  }
-  .niam-overlay {
-    position:fixed;
-    inset:0;
-    z-index:2147483647;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-      radial-gradient(1000px 400px at 50% 20%, rgba(255,136,0,0.04), transparent 15%),
-      linear-gradient(180deg,var(--bg1),var(--bg2));
-    font-family: Inter, "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    color:var(--accent);
-    overflow:hidden;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
-  .niam-panel{
-    width:min(1150px,94%);
-    max-width:1150px;
-    border-radius:20px;
-    padding:34px;
-    background: linear-gradient(180deg, rgba(255,136,0,0.03), rgba(255,136,0,0.01));
-    box-shadow: 0 10px 40px rgba(0,0,0,0.65), 0 0 120px rgba(255,136,0,0.06) inset;
-    display:grid;
-    grid-template-columns: 360px 1fr;
-    gap:28px;
-    align-items:center;
-    transform: translateY(10px);
-    animation: panelIn 700ms cubic-bezier(.16,.8,.24,1) both;
-  }
+    // ===== Text & Links =====
+    const title = document.createElement('h1');
+    title.textContent = "Niam is rebuilding this site";
+    title.style.cssText = `
+      font-size: 2.5rem;
+      margin-top: 20px;
+      text-shadow: 0 0 20px #ff8c00;
+    `;
 
-  @keyframes panelIn{
-    from{opacity:0; transform: translateY(30px) scale(.995)}
-    to{opacity:1; transform: translateY(0) scale(1)}
-  }
+    const info = document.createElement('p');
+    info.innerHTML = `
+      Estimated launch: <b>11/3/25 @ 4:00PM</b><br>
+      Might drop earlier if I’m cooking 🔥<br><br>
+      <span style="opacity:0.8;">Bigger. Faster. Cleaner. Worth the wait.</span>
+    `;
+    info.style.cssText = `
+      font-size: 1rem;
+      margin: 10px 0 30px 0;
+    `;
 
-  /* Left column - Excavator & GIF */
-  .left-col{ display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:center; }
-  .excavator-wrap{ width:320px; height:220px; display:flex; align-items:center; justify-content:center; }
-  .gif-preview{
-    width:320px; height:180px; border-radius:12px; overflow:hidden; background:#080808; display:flex; align-items:center; justify-content:center;
-    border:1px solid rgba(255,136,0,0.08); box-shadow: 0 6px 30px rgba(255,136,0,0.06);
-  }
-  .gif-preview img{ width:100%; height:100%; object-fit:cover; display:block; }
+    const tempLink = document.createElement('a');
+    tempLink.href = "https://issaquah-instructure-com.github.io/";
+    tempLink.textContent = "Visit temporary site";
+    tempLink.style.cssText = `
+      color: #FFA500;
+      text-decoration: none;
+      font-weight: bold;
+      border: 2px solid #FFA500;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    `;
+    tempLink.onmouseover = () => tempLink.style.background = '#FFA50022';
+    tempLink.onmouseout = () => tempLink.style.background = 'transparent';
 
-  /* Right column - Text and links */
-  .right-col{ padding:6px 16px; display:flex; flex-direction:column; gap:12px; }
-  .title{
-    font-size:30px; line-height:1.02; font-weight:700; color:var(--accent);
-    text-shadow: 0 0 18px rgba(255,136,0,0.18);
-  }
-  .blurb{
-    color:var(--muted); font-size:15px; margin-top:4px;
-  }
-  .time{
-    margin-top:10px; font-weight:600; color: #ffd19a; font-size:15px;
-  }
-  .small-note{
-    font-size:12px; color: #bfa07a; opacity:0.9; margin-top:6px;
-  }
+    const launchLink = document.createElement('a');
+    launchLink.href = "https://macvg2025.github.io/launch/watch/";
+    launchLink.textContent = "Watch the Launch";
+    launchLink.style.cssText = `
+      color: #FFA500;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 20px;
+      display: inline-block;
+      transition: all 0.3s ease;
+    `;
+    launchLink.onmouseover = () => launchLink.style.textShadow = '0 0 10px #FFA500';
+    launchLink.onmouseout = () => launchLink.style.textShadow = 'none';
 
-  .controls{ margin-top:14px; display:flex; gap:12px; flex-wrap:wrap; }
-  .btn {
-    display:inline-flex; align-items:center; gap:10px; border-radius:12px; padding:10px 16px; cursor:pointer;
-    font-weight:700; text-decoration:none; border:2px solid transparent; transition:all .18s ease;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-  }
-  .btn.temp {
-    background: linear-gradient(180deg, var(--accent), var(--accent-dark));
-    color:#060606;
-    border-color: rgba(255,136,0,0.18);
-  }
-  .btn.watch {
-    background:transparent; color:var(--accent); border:2px solid rgba(255,136,0,0.18);
-  }
-  .btn:hover{ transform:translateY(-4px) scale(1.01); box-shadow: 0 18px 50px rgba(255,136,0,0.08); }
+    overlay.append(title, info, tempLink, launchLink);
+    document.body.appendChild(overlay);
 
-  /* Footer / small credits */
-  .foot{ margin-top:18px; color:#a97a3d; font-size:12px; opacity:0.9; }
-
-  /* Excavator SVG animations (fine-tuned) */
-  .excav-svg { width:320px; height:auto; overflow:visible; filter: drop-shadow(0 6px 18px rgba(255,136,0,0.06)); }
-  /* decorative animated horizontal glow line */
-  .glow-line { position:absolute; left:6%; right:6%; height:1px; background: linear-gradient(90deg, transparent, rgba(255,136,0,0.12), transparent); transform: translateY(-38%); pointer-events:none; }
-  
-  @media (max-width:880px){
-    .niam-panel{ grid-template-columns: 1fr; padding:20px; gap:18px; }
-    .left-col{ order:2 }
-    .right-col{ order:1 }
-    .excavator-wrap, .gif-preview { width:92%; }
-  }
-  `;
-
-  const styleEl = document.createElement("style");
-  styleEl.textContent = css;
-  document.head.appendChild(styleEl);
-
-  // ----- BUILD DOM -----
-  const overlay = document.createElement("div");
-  overlay.className = "niam-overlay";
-  overlay.innerHTML = `
-  <div class="niam-panel" role="dialog" aria-modal="true" aria-label="Site update information">
-    <div class="left-col">
-      <div class="excavator-wrap" aria-hidden="true">
-        <!-- SVG excavator (stylized, animated via SMIL & CSS) -->
-        <svg class="excav-svg" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <linearGradient id="metal" x1="0" x2="1">
-              <stop offset="0" stop-color="#2b2b2b"/>
-              <stop offset="1" stop-color="#111"/>
-            </linearGradient>
-            <linearGradient id="orange" x1="0" x2="1">
-              <stop offset="0" stop-color="#ffb14a"/>
-              <stop offset="1" stop-color="#ff8c00"/>
-            </linearGradient>
-            <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="6" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-
-          <!-- ground / pile -->
-          <g id="ground">
-            <rect x="0" y="220" width="360" height="40" fill="#050505"/>
-            <g id="pile" transform="translate(50,206)">
-              <ellipse cx="220" cy="18" rx="48" ry="10" fill="#2e1d10" opacity="0.95"/>
-            </g>
-          </g>
-
-          <!-- excavator group (we rotate parts inside) -->
-          <g id="excavator" transform="translate(40,80)">
-            <!-- tracks -->
-            <g id="tracks" transform="translate(0,82)">
-              <rect x="0" y="0" width="220" height="26" rx="10" fill="#0d0d0d" />
-              <g transform="translate(16,13)">
-                <circle cx="18" cy="8" r="12" fill="#111"/>
-                <circle cx="60" cy="8" r="12" fill="#111"/>
-                <circle cx="102" cy="8" r="12" fill="#111"/>
-                <circle cx="144" cy="8" r="12" fill="#111"/>
-              </g>
-            </g>
-
-            <!-- cabin -->
-            <g id="cab" transform="translate(36,0)">
-              <rect x="0" y="34" width="84" height="58" rx="8" fill="url(#metal)"/>
-              <rect x="8" y="42" width="68" height="44" rx="6" fill="#000" opacity="0.85"/>
-              <rect x="14" y="48" width="40" height="30" rx="4" fill="#0b0b0b" opacity="0.6"/>
-              <rect x="58" y="48" width="10" height="22" rx="2" fill="#111" opacity="0.6"/>
-            </g>
-
-            <!-- upper-rotation platform (rotates slightly when dumping) -->
-            <g id="platform" transform="translate(20,20)">
-              <rect x="0" y="0" width="140" height="18" rx="4" fill="url(#metal)"/>
-              <!-- arm group -->
-              <g id="arm-root" transform="translate(120,10)">
-                <!-- first arm segment -->
-                <g id="arm1" transform="rotate(0 0 0)">
-                  <rect x="-4" y="-2" width="110" height="12" rx="6" fill="url(#orange)"/>
-                  <!-- elbow joint -->
-                  <circle cx="106" cy="4" r="8" fill="#2b2b2b" />
-                  <!-- second arm segment (rotates at elbow) -->
-                  <g id="arm2" transform="translate(106,4) rotate(0)">
-                    <rect x="0" y="-6" width="64" height="12" rx="6" fill="url(#orange)"/>
-                    <!-- bucket group -->
-                    <g id="bucketGroup" transform="translate(64,0)">
-                      <g id="bucket" transform="rotate(0)">
-                        <path d="M2 -6 L18 -6 L24 6 L0 6 Z" fill="#3b2a1f" stroke="#2b1e15" stroke-width="1"/>
-                        <rect x="4" y="-2" width="10" height="8" rx="2" fill="#5a3e2e" opacity="0.9"/>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </g>
-
-          <!-- dirt element that gets scooped -->
-          <g id="dirtLayer">
-            <!-- dirt blob that will move into bucket -->
-            <g id="dirt" transform="translate(120,208) scale(1)">
-              <path d="M0 0 q6 -8 18 -6 q8 3 18 0 q6 2 10 10 q-40 8 -46 -4z" fill="#3b2a1f"/>
-            </g>
-          </g>
-
-          <!-- subtle glow element -->
-          <g style="filter:url(#softGlow); opacity:0.25;">
-            <ellipse cx="180" cy="160" rx="90" ry="30" fill="#ff8c00"/>
-          </g>
-        </svg>
-      </div>
-
-      <div class="gif-preview" aria-label="Preview GIF area">
-        <img alt="Preview GIF" src="${GIF_SRC}">
-      </div>
-    </div>
-
-    <div class="right-col">
-      <div class="title">Niam is updating this site</div>
-      <div class="blurb">We're rebuilding everything with extra polish — it may take more time, but the result will truly stand out.</div>
-      <div class="time">Planned relaunch: <strong>${LAUNCH_TEXT}</strong></div>
-      <div class="small-note">(or earlier if I'm cooking)</div>
-
-      <div class="controls" role="group" aria-label="Links">
-        <a class="btn temp" id="btn-temp" href="${TEMP_SITE}" target="_blank" rel="noopener">Temporary site</a>
-        <a class="btn watch" id="btn-watch" href="${WATCH_SITE}" target="_blank" rel="noopener">Watch the launch</a>
-        <a class="btn" id="btn-dismiss" href="#" role="button" style="background:transparent;border:2px dashed rgba(255,136,0,0.08);color:var(--muted);">Close overlay</a>
-      </div>
-
-      <div class="foot">Thank you for being patient — bigger and better is on the way.</div>
-    </div>
-  </div>
-  <div class="glow-line" aria-hidden="true"></div>
-  `;
-
-  // prevent underlying page interaction
-  overlay.addEventListener("click", (e) => {
-    // clicking outside panel does nothing; keep modal behavior
-    if (e.target === overlay) e.stopPropagation();
-  });
-
-  // append overlay
-  document.documentElement.style.overflow = "hidden"; // prevent scroll
-  document.body.appendChild(overlay);
-
-  // ----- AUDIO -----
-  const audio = new Audio(AUDIO_SRC);
-  audio.volume = 0.75;
-  audio.loop = false;
-  // attempt to play now (will fail silently if browser blocks), still usable on click handlers
-  audio.play().catch(() => { /* autoplay blocked */ });
-
-  // when clicking temporary site, open in new tab and play sound quickly on this page
-  const btnTemp = document.getElementById("btn-temp");
-  btnTemp.addEventListener("click", (ev) => {
-    ev.preventDefault();
-    try { audio.currentTime = 0; audio.play().catch(()=>{}); } catch {}
-    window.open(TEMP_SITE, "_blank", "noopener");
-  });
-
-  // watch button just opens new tab (no delay)
-  const btnWatch = document.getElementById("btn-watch");
-  btnWatch.addEventListener("click", (ev) => {
-    // don't play sound here to avoid annoyance; they asked for watch link present
-    // open in new tab
-    ev.preventDefault();
-    window.open(WATCH_SITE, "_blank", "noopener");
-  });
-
-  // close overlay
-  const btnDismiss = document.getElementById("btn-dismiss");
-  btnDismiss.addEventListener("click", (ev) => {
-    ev.preventDefault();
-    // remove overlay cleanly
-    document.body.removeChild(overlay);
-    document.documentElement.style.overflow = ""; // restore scroll
-  });
-
-  // ----- SVG ANIMATION SEQUENCE (SMIL) -----
-  // We'll programmatically add SMIL <animateTransform> elements for timing & smoothness.
-  // (SMIL is widely supported for these simple transforms; this avoids heavy JS loops.)
-
-  // Helpers to add SMIL animation nodes
-  function addAnim(target, type, values, dur, begin = "0s", repeat = "indefinite", calcMode = "linear", fill = "freeze") {
-    const anim = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
-    anim.setAttribute("attributeName", "transform");
-    anim.setAttribute("attributeType", "XML");
-    anim.setAttribute("type", type);
-    anim.setAttribute("values", values);
-    anim.setAttribute("dur", dur);
-    anim.setAttribute("begin", begin);
-    anim.setAttribute("repeatCount", repeat);
-    anim.setAttribute("calcMode", calcMode);
-    anim.setAttribute("fill", fill);
-    target.appendChild(anim);
-    return anim;
-  }
-
-  // grab elements
-  const svgRoot = overlay.querySelector(".excav-svg");
-  const arm1 = svgRoot.querySelector("#arm1");
-  const arm2 = svgRoot.querySelector("#arm2");
-  const bucket = svgRoot.querySelector("#bucket");
-  const excav = svgRoot.querySelector("#excavator");
-  const dirt = svgRoot.querySelector("#dirt");
-  const pile = svgRoot.querySelector("#pile");
-
-  // sequence idea (loop):
-  // 0s -> arm lowers (arm1 rotates -30deg; arm2 rotates 40deg; bucket rotates -30deg) over 1.2s
-  // 1.2s -> dirt moves upward into bucket over 0.7s (translated)
-  // 2.0s -> arm lifts (reverse rotations) and platform rotates a bit to dump (excavator group rotates 35deg) over 1.0s
-  // 3.0s -> bucket opens to drop (bucket rotate 90deg) and dirt moves to pile position over 0.5s
-  // 3.6s -> platform rotates back and bucket resets over 1s
-  // total loop ~5s with smooth easing
-
-  // Clear any existing anim children (safety)
-  [arm1, arm2, bucket, excav, dirt].forEach(n => {
-    if (!n) return;
-    Array.from(n.querySelectorAll("animateTransform")).forEach(a => a.remove());
-    Array.from(n.querySelectorAll("animate")).forEach(a => a.remove());
-  });
-
-  // arm1: rotate about its left origin (use transform rotate with pivot at (0,0) of its group)
-  // values are degrees; we alternate between neutral -> lowered -> neutral -> lowered-small -> neutral to look organic
-  addAnim(arm1, "rotate", "0 -20 0; -28 -20 0; -24 -20 0; -28 -20 0; 0 -20 0", "5s", "0s");
-
-  // arm2 (elbow): smaller counter-rotations to simulate elbow bending
-  addAnim(arm2, "rotate", "0 0 0; 32 0 0; 28 0 0; 34 0 0; 0 0 0", "5s", "0s");
-
-  // bucket: small tilt during scoop, large tilt during dump
-  addAnim(bucket, "rotate", "0; -28; -22; -28; 0", "5s", "0s");
-
-  // excavator platform slight swing (to simulate turning for dump)
-  addAnim(excav, "rotate", "0; 6; 18; 34; 18; 6; 0", "5s", "0s");
-
-  // dirt movement (translate path): starts at ground, moves into bucket, then to pile
-  // We'll animate via animateTransform type="translate"
-  // Build a values string for translate: start -> into bucket -> hold -> to pile -> back
-  const dirtTranslate = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
-  dirtTranslate.setAttribute("attributeName", "transform");
-  dirtTranslate.setAttribute("attributeType", "XML");
-  dirtTranslate.setAttribute("type", "translate");
-  // coordinates are approximated to match bucket positions in the viewBox. Adjusted so it looks smooth.
-  dirtTranslate.setAttribute("values",
-    "0,0; 34,-28; 34,-28; 170,-18; 0,0"
-  );
-  dirtTranslate.setAttribute("keyTimes", "0;0.28;0.36;0.72;1");
-  dirtTranslate.setAttribute("dur", "5s");
-  dirtTranslate.setAttribute("repeatCount", "indefinite");
-  dirtTranslate.setAttribute("calcMode", "spline");
-  dirtTranslate.setAttribute("keySplines", ".42 0 0.58 1; .42 0 0.58 1; .42 0 0.58 1; .42 0 0.58 1");
-  dirt.appendChild(dirtTranslate);
-
-  // Dirt opacity change when in bucket (to seem contained)
-  const dirtOpacity = document.createElementNS("http://www.w3.org/2000/svg", "animate");
-  dirtOpacity.setAttribute("attributeName", "opacity");
-  dirtOpacity.setAttribute("values", "1;1;0.96;0;1");
-  dirtOpacity.setAttribute("keyTimes", "0;0.28;0.36;0.72;1");
-  dirtOpacity.setAttribute("dur", "5s");
-  dirtOpacity.setAttribute("repeatCount", "indefinite");
-  dirt.appendChild(dirtOpacity);
-
-  // pile build: create a subtle scale + translate so pile gets slightly bigger each dump
-  const pileEl = svgRoot.querySelector("#pile");
-  const pileScale = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
-  pileScale.setAttribute("attributeName", "transform");
-  pileScale.setAttribute("attributeType", "XML");
-  pileScale.setAttribute("type", "translate");
-  pileScale.setAttribute("values", "0,0; 0,0; 0,0; 0,0; 0,0");
-  pileScale.setAttribute("dur", "5s");
-  pileScale.setAttribute("repeatCount", "indefinite");
-  pileEl.appendChild(pileScale);
-
-  // subtle idle breathing for the title glow
-  const titleEl = overlay.querySelector(".title");
-  titleEl.animate(
-    [{ textShadow: "0 0 8px rgba(255,136,0,0.12)", transform: "translateY(0)" },
-     { textShadow: "0 0 26px rgba(255,136,0,0.20)", transform: "translateY(-2px)" },
-     { textShadow: "0 0 8px rgba(255,136,0,0.12)", transform: "translateY(0)" }],
-    { duration: 2500, iterations: Infinity, easing: "ease-in-out" }
-  );
-
-  // Gif fallback: if GIF fails to load, show placeholder text
-  const gifImg = overlay.querySelector(".gif-preview img");
-  gifImg.addEventListener("error", () => {
-    gifImg.style.display = "none";
-    const holder = document.createElement("div");
-    holder.style.width = "100%";
-    holder.style.height = "100%";
-    holder.style.display = "flex";
-    holder.style.alignItems = "center";
-    holder.style.justifyContent = "center";
-    holder.style.color = "#b07a34";
-    holder.textContent = "Preview GIF (drop your GIF URL into the script)";
-    overlay.querySelector(".gif-preview").appendChild(holder);
-  });
-
-  // Accessibility: focus first control
-  btnTemp.focus();
-
-  // Safety: if user navigates away, stop audio
-  window.addEventListener("beforeunload", () => {
-    try { audio.pause(); audio.currentTime = 0; } catch {}
-  });
-
-  // Done
-})();
-
+    // ====== Sound ======
+    const audio = new Audio('ty.mp3');
+    audio.play().catch(() => console.warn("Autoplay blocked — user interaction required."));
   </script>
 </body>
-
 </html>
